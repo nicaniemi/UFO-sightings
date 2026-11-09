@@ -14,7 +14,7 @@ int main()
 {
   auto sightings = loadSightings("data/close_encounters_simplified.csv"); // Load and parse CSV file of sightings, store all sightings
 
-  HashGrid grid(1.0); // Initialize the hash table with cell size of 1 degree
+  HashGrid grid(1.0); // Initialize the hash grid with cell size of 1 degree
   for (size_t i = 0; i < sightings.size(); i++)
   {
     grid.insertSighting(sightings[i], i); // Insert each sighting into the table
@@ -340,13 +340,14 @@ int main()
       }
       cout << "Total sightings in distance: " << found.size() << endl;
       cout << "Total time taken to filter through sightings: " << timeFinal.count() << " microseconds" << endl;
+      printMenu = true;
     }
 
-  }
-
-
-  if (selection == 4)
-  {
-    cout << "Thank you for using the Close Encounters Library!" << endl;
+    if (selection == 4)
+    {
+      cout << "Thank you for using the Close Encounters Library!" << endl;
+      printMenu = false;
+      endProgram = true;
+    }
   }
 }

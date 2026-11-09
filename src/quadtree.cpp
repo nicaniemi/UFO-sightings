@@ -46,12 +46,12 @@ void QuadTree::build(const std::vector<Sighting>& sightingsRef)
 {
     sightings = &sightingsRef;
     for (int i = 0; i < static_cast<int>(sightingsRef.size()); i++)
-        insert(root, i);
+        insert(root, i, 0);
 }
 
 void QuadTree::insertSighting(const Sighting& sighting, int index)
 {
-    insert(root, index);
+    insert(root, index, 0);
 }
 
 void QuadTree::subdivide(Node* node)
@@ -70,14 +70,14 @@ void QuadTree::subdivide(Node* node)
     node->divided = true;
 }
 
-void QuadTree::insert(Node* node, int index)
+void QuadTree::insert(Node* node, int index, int depth)
 {
     const Sighting& s = (*sightings)[index];
 
     if (!node->bounds.contains(s.lat, s.lon))
         return;
 
-    if (!node->divided && static_cast<int>(node->indices.size()) < MAX_CAPACITY)
+    if (!node->divided && (static_cast<int>(node->indices.size()) < MAX_CAPACITY || depth >= MAX_DEPTH))
     {
         node->indices.push_back(index);
         return;
@@ -92,7 +92,7 @@ void QuadTree::insert(Node* node, int index)
             {
                 if (node->children[c]->bounds.contains((*sightings)[i].lat, (*sightings)[i].lon))
                 {
-                    insert(node->children[c], i);
+                    insert(node->children[c], i, depth+1);
                     break;
                 }
             }
@@ -104,7 +104,7 @@ void QuadTree::insert(Node* node, int index)
     {
         if (node->children[c]->bounds.contains(s.lat, s.lon))
         {
-            insert(node->children[c], index);
+            insert(node->children[c], index, depth+1);
             break;
         }
     }

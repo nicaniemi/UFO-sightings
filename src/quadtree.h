@@ -21,6 +21,7 @@ struct BoundingBox
 class QuadTree
 {
     static constexpr int MAX_CAPACITY = 4; // Max sightings per node before splitting
+    static constexpr int MAX_DEPTH = 20; // Max height of the tree - 1 (doesn't include root)
 
     struct Node
     {
@@ -36,7 +37,7 @@ class QuadTree
     Node* root;
     const std::vector<Sighting>* sightings; 
 
-    void insert(Node* node, int index);
+    void insert(Node* node, int index, int depth);
     void subdivide(Node* node);
     void radiusSearch(const Node* node, double lat, double lon,
                       double radius, std::vector<int>& results) const;

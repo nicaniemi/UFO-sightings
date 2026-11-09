@@ -7,6 +7,7 @@
 #include "hashgrid.h"
 #include "geo.h"
 
+// HashGrid constructor, we ended up changing our mind so user does not define cellSize anymore, so main automatically initializes to 1
 HashGrid::HashGrid(double cellSize) : cellSize(cellSize) // Initialize cell size, ensure greater than 0
 {
   if (cellSize <= 0)
@@ -23,10 +24,11 @@ std::string HashGrid::coordToCellHelper(const double lat, const double lon) cons
   if (lon < -180 || lon > 180) // Check longitude bounds
     throw std::invalid_argument("Longitude out of bounds.");
 
-  int x = static_cast<int>(std::floor(lat / cellSize)); // So string is one number without decimals
+  // Convert cell x and y to a whole number, remove decimals
+  int x = static_cast<int>(std::floor(lat / cellSize));
   int y = static_cast<int>(std::floor(lon / cellSize));
 
-  const std::string xCoordinate = std::to_string(x); // Coordinates stores as strings
+  const std::string xCoordinate = std::to_string(x); // Coordinates stored as strings
   const std::string yCoordinate = std::to_string(y);
 
   return xCoordinate + "," + yCoordinate;
